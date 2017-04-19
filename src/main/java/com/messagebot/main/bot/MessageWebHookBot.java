@@ -3,29 +3,32 @@ package com.messagebot.main.bot;
 import com.messagebot.main.consts.TelegramBotConsts;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.telegram.telegrambots.api.methods.BotApiMethod;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.Update;
-import org.telegram.telegrambots.bots.TelegramLongPollingBot;
+import org.telegram.telegrambots.bots.TelegramWebhookBot;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
 
 /**
- * Created by dmatafonov on 18.04.2017.
+ * Created by dmatafonov on 19.04.2017.
  */
-public class MessageBot extends TelegramLongPollingBot {
+public class MessageWebHookBot extends TelegramWebhookBot {
 
-	Logger log = LoggerFactory.getLogger(MessageBot.class);
+	Logger log = LoggerFactory.getLogger(MessagePollingBot.class);
 
 	@Override
-	public void onUpdateReceived(Update update) {
-		if (update.hasMessage() && update.getMessage().hasText() && !update.getMessage().getFrom().getFirstName().isEmpty() && !update.getMessage().getFrom().getLastName().isEmpty()) {
+	public BotApiMethod onWebhookUpdateReceived(Update update) {
+		if (update.hasMessage() && update.getMessage().hasText()) {
 			SendMessage message = new SendMessage().setChatId(update.getMessage().getChatId()).setText("Hello, " + update.getMessage().getFrom().getFirstName() + " " + update.getMessage().getFrom().getLastName());
 			try {
 				sendMessage(message);
 				log.info(message.getText());
 			} catch (TelegramApiException e) {
 				log.error(e.getMessage());
+
 			}
 		}
+		return null;
 	}
 
 	@Override
@@ -36,5 +39,10 @@ public class MessageBot extends TelegramLongPollingBot {
 	@Override
 	public String getBotToken() {
 		return TelegramBotConsts.BOT_API_KEY;
+	}
+
+	@Override
+	public String getBotPath() {
+		return null;
 	}
 }

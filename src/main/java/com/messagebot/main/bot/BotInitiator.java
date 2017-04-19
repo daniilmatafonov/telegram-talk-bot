@@ -10,6 +10,6 @@ public class BotInitiator {
 	public static void initializeMyBot() throws TelegramApiRequestException {
 		ApiContextInitializer.init();
 		TelegramBotsApi telegramBotsApi = new TelegramBotsApi();
-		telegramBotsApi.registerBot(new MessageBot());
+		telegramBotsApi.registerBot(new MessagePollingBot());
 	}
 }
