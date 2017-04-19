@@ -43,6 +43,6 @@ public class MessageWebHookBot extends TelegramWebhookBot {
 
 	@Override
 	public String getBotPath() {
-		return null;
+		return TelegramBotConsts.BOT_MESSAGES_URL;
 	}
 }
