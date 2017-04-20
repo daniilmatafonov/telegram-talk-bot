@@ -1,5 +1,6 @@
 package com.messagebot.main.bot;
 
+import com.messagebot.main.consts.BotCommands;
 import com.messagebot.main.consts.TelegramBotConsts;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,8 +18,10 @@ public class MessagePollingBot extends TelegramLongPollingBot {
 
 	@Override
 	public void onUpdateReceived(Update update) {
-		if (update.hasMessage() && update.getMessage().hasText() && !update.getMessage().getFrom().getFirstName().isEmpty() && !update.getMessage().getFrom().getLastName().isEmpty()) {
-			SendMessage message = new SendMessage().setChatId(update.getMessage().getChatId()).setText("Hello, " + update.getMessage().getFrom().getFirstName() + " " + update.getMessage().getFrom().getLastName());
+		if (update.hasMessage() && update.getMessage().hasText() && !update.getMessage().getFrom().getFirstName().isEmpty()
+				&& !update.getMessage().getFrom().getLastName().isEmpty()
+				&& update.getMessage().getText().equals(BotCommands.HELLO_COMMAND)) {
+				SendMessage message = new SendMessage().setChatId(update.getMessage().getChatId()).setText("Hello, " + update.getMessage().getFrom().getFirstName() + " " + update.getMessage().getFrom().getLastName());
 			try {
 				sendMessage(message);
 				log.info(message.getText());
