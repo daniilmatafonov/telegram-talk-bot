@@ -2,6 +2,8 @@ package com.messagebot.main.bot;
 
 import com.messagebot.main.commands.HelpCommand;
 import com.messagebot.main.commands.HelloCommand;
+import com.messagebot.main.commands.StartCommand;
+import com.messagebot.main.commands.StopCommand;
 import com.messagebot.main.consts.TelegramBotConsts;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,8 +21,11 @@ public class CommandsBot extends TelegramLongPollingCommandBot {
 
 	public CommandsBot() {
 		HelpCommand helpCommand = new HelpCommand(this);
-		register(new HelloCommand());
+		StartCommand startCommand = new StartCommand(this);
+		register(startCommand);
 		register(helpCommand);
+		register(new HelloCommand());
+		register(new StopCommand());
 		registerDefaultAction((absSender, message) -> {
 			SendMessage unknownCommand = new SendMessage();
 			unknownCommand.setChatId(message.getChatId());
