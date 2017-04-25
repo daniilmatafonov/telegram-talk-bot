@@ -1,7 +1,7 @@
 package com.messagebot.main;
 
 
-import com.messagebot.main.bot.CommandsBot;
+import com.messagebot.main.bot.MessageBot;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.telegram.telegrambots.ApiContextInitializer;
@@ -15,7 +15,8 @@ public class TelegramTalkBotApplication {
 		SpringApplication.run(TelegramTalkBotApplication.class, args);
 		ApiContextInitializer.init();
 		TelegramBotsApi telegramBotsApi = new TelegramBotsApi();
-		telegramBotsApi.registerBot(new CommandsBot());
+		telegramBotsApi.registerBot(new MessageBot());
+		//	telegramBotsApi.registerBot(new CommandsBot());
 	}
 
 

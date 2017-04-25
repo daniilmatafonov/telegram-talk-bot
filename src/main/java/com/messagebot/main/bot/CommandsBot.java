@@ -41,13 +41,14 @@ public class CommandsBot extends TelegramLongPollingCommandBot {
 
 	@Override
 	public void processNonCommandUpdate(Update update) {
-		SendMessage message = new SendMessage().setChatId(update.getMessage().getChatId()).setText("Hello, " + update.getMessage().getFrom().getFirstName() + " " + update.getMessage().getFrom().getLastName());
+	/*	SendMessage message = new SendMessage().setChatId(update.getMessage().getChatId()).setText("Hello, " + update.getMessage().getFrom().getFirstName() + " " + update.getMessage().getFrom().getLastName());
 		try {
 			sendMessage(message);
 			log.info(message.getText());
 		} catch (TelegramApiException e) {
 			log.error(e.getMessage());
 		}
+		*/
 	}
 
 	@Override
