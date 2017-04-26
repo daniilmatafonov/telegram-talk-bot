@@ -8,11 +8,11 @@ import org.springframework.web.bind.annotation.RestController;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 
 @RestController
-@RequestMapping(name = "/api")
+@RequestMapping(name = "/")
 public class MessageController {
 
 
-	@RequestMapping(value = "/sendmessage/", method = RequestMethod.GET)
+	@RequestMapping(value = "/callback/", method = RequestMethod.GET)
 	public ResponseEntity<SendMessage> sendMessage() {
 		SendMessage sendMessage = new SendMessage();
 		sendMessage.setChatId("1425215");

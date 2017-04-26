@@ -18,9 +18,9 @@ import java.util.List;
 /**
  * Created by dmatafonov on 25.04.2017.
  */
-public class MessageBot extends TelegramLongPollingBot {
+public class MessageLongPollingBot extends TelegramLongPollingBot {
 
-	private Logger logger = LoggerFactory.getLogger(MessageBot.class);
+	private Logger logger = LoggerFactory.getLogger(MessageLongPollingBot.class);
 
 	@Override
 	public void onUpdateReceived(Update update) {

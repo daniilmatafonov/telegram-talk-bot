@@ -1,7 +1,9 @@
 package com.messagebot.main;
 
 
-import com.messagebot.main.bot.MessageBot;
+import com.messagebot.main.bot.MessageLongPollingBot;
+import com.messagebot.main.bot.MessageWebhookBot;
+import com.messagebot.main.consts.TelegramBotConsts;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.telegram.telegrambots.ApiContextInitializer;
@@ -14,9 +16,21 @@ public class TelegramTalkBotApplication {
 	public static void main(String[] args) throws TelegramApiException {
 		SpringApplication.run(TelegramTalkBotApplication.class, args);
 		ApiContextInitializer.init();
-		TelegramBotsApi telegramBotsApi = new TelegramBotsApi();
-		telegramBotsApi.registerBot(new MessageBot());
-		//	telegramBotsApi.registerBot(new CommandsBot());
+		TelegramBotsApi telegramBotsApi;
+		telegramBotsApi = createWebHookBot();
+		telegramBotsApi.registerBot(new MessageWebhookBot());
+		//telegramBotsApi.registerBot(new CommandsBot());
+	}
+
+
+	private static MessageLongPollingBot createPollingTelegramBotsApi() throws TelegramApiException {
+		return new MessageLongPollingBot();
+	}
+
+
+	private static TelegramBotsApi createWebHookBot() throws TelegramApiException {
+		return new TelegramBotsApi(TelegramBotConsts.EXTERNALWEBHOOKURL,
+				TelegramBotConsts.INTERNALWEBHOOKURL);
 	}
 
 
