@@ -1,10 +1,11 @@
 package com.messagebot.main.bot;
 
-import com.messagebot.main.consts.BotCommandsConsts;
 import com.messagebot.main.consts.TelegramBotConsts;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.telegram.telegrambots.api.methods.send.SendDocument;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
+import org.telegram.telegrambots.api.objects.Document;
 import org.telegram.telegrambots.api.objects.Message;
 import org.telegram.telegrambots.api.objects.Update;
 import org.telegram.telegrambots.api.objects.replykeyboard.ReplyKeyboardMarkup;
@@ -26,7 +27,10 @@ public class MessageLongPollingBot extends TelegramLongPollingBot {
 	public void onUpdateReceived(Update update) {
 		try {
 			if (update.hasMessage()) {
-				org.telegram.telegrambots.api.objects.Message message = update.getMessage();
+				Message message = update.getMessage();
+				if(message.getDocument() != null){
+					sendDocument(message);
+				}
 				String command = message.getText();
 				switch (command) {
 					case TelegramBotConsts.HELLO_KEYBOARD:
@@ -80,8 +84,8 @@ public class MessageLongPollingBot extends TelegramLongPollingBot {
 	}
 
 
-	private static SendMessage sendHello(org.telegram.telegrambots.api.objects.Message message) {
-		String userName = BotUtils.getUserName(message);
+	private static SendMessage sendHello(Message message) {
+		String userName = BotUtils.getUserNameAPI(message);
 		StringBuilder messageTextBuilder = new StringBuilder("Hello, ").append(userName);
 		SendMessage sendMessage = new SendMessage();
 		sendMessage.enableMarkdown(true);
@@ -91,23 +95,33 @@ public class MessageLongPollingBot extends TelegramLongPollingBot {
 		return sendMessage;
 	}
 
-	private static SendMessage sendStart(org.telegram.telegrambots.api.objects.Message message) {
-		String userName = BotUtils.getUserName(message);
+	private static SendDocument sendDocument(Message message){
+		Document document = message.getDocument();
+		StringBuilder messageTextBuilder = new StringBuilder("Your file successfully sent").append(document.getFileName() + " " + document.getFileSize());
+		SendDocument sendDocument = new SendDocument();
+		sendDocument.setChatId(message.getChatId());
+		sendDocument.setDocument(messageTextBuilder.toString());
+		sendDocument.setReplyToMessageId(message.getMessageId());
+		return sendDocument;
+	}
+
+	private static SendMessage sendStart(Message message) {
+		String userName = BotUtils.getUserNameAPI(message);
 		StringBuilder messageTextBuilder = new StringBuilder("Hello, " + userName + ". Welcome to SimpleTalkBot. Let's start conversation.");
 		SendMessage sendMessage = prepareSendRequest(message, messageTextBuilder);
 		return sendMessage;
 	}
 
-	private static SendMessage sendStop(org.telegram.telegrambots.api.objects.Message message) throws TelegramApiException {
-		String userName = BotUtils.getUserName(message);
+	private static SendMessage sendStop(Message message) throws TelegramApiException {
+		String userName = BotUtils.getUserNameAPI(message);
 		StringBuilder messageTextBuilder = new StringBuilder("Good bye, " + userName);
 		SendMessage sendMessage = prepareSendRequest(message, messageTextBuilder);
 		return sendMessage;
 	}
 
-	private static SendMessage sendHelp(org.telegram.telegrambots.api.objects.Message message) {
-		StringBuilder res = new StringBuilder("Available commands are " + BotCommandsConsts.HELLO_COMMAND + " " + BotCommandsConsts.HELP_COMMAND + " "
-				+ BotCommandsConsts.START_COMMAND + " " + BotCommandsConsts.STOP_COMMAND);
+	private static SendMessage sendHelp(Message message) {
+		StringBuilder res = new StringBuilder("Available commands are " + TelegramBotConsts.HELLO_COMMAND + " " + TelegramBotConsts.HELP_COMMAND + " "
+				+ TelegramBotConsts.START_COMMAND + " " + TelegramBotConsts.STOP_COMMAND);
 		SendMessage sendMessage = prepareSendRequest(message, res);
 		return sendMessage;
 	}
