@@ -1,24 +1,26 @@
 package com.messagebot.main.core;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import com.messagebot.main.consts.TelegramBotConsts;
+import com.messagebot.main.handlers.UpdateHandlerImpl;
+import com.pengrad.telegrambot.TelegramBot;
+import com.pengrad.telegrambot.TelegramBotAdapter;
+import com.pengrad.telegrambot.model.Update;
+import com.pengrad.telegrambot.request.SendMessage;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import org.telegram.telegrambots.api.methods.send.SendMessage;
 
 @RestController
 @RequestMapping(name = "/")
 public class MessageController {
 
+	private TelegramBot bot = TelegramBotAdapter.build(TelegramBotConsts.BOT_API_KEY);
 
-	@RequestMapping(value = "/callback/", method = RequestMethod.GET)
-	public ResponseEntity<SendMessage> sendMessage() {
-		SendMessage sendMessage = new SendMessage();
-		sendMessage.setChatId("1425215");
-		sendMessage.setText("Hello");
-		return new ResponseEntity<>(sendMessage, HttpStatus.OK);
+	private UpdateHandlerImpl updateHandler = new UpdateHandlerImpl();
+
+	@RequestMapping(value = "/callback/", method = RequestMethod.POST)
+	public SendMessage sendMessage(@RequestBody Update update) {
+		return updateHandler.update(update);
 	}
-
-
 }

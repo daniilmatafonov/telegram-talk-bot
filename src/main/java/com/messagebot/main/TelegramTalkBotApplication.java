@@ -16,10 +16,10 @@ public class TelegramTalkBotApplication {
 	public static void main(String[] args) throws TelegramApiException {
 		SpringApplication.run(TelegramTalkBotApplication.class, args);
 		ApiContextInitializer.init();
-		TelegramBotsApi telegramBotsApi;
-		telegramBotsApi = createWebHookBot();
-		telegramBotsApi.registerBot(new MessageWebhookBot());
-		//telegramBotsApi.registerBot(new CommandsBot());
+		TelegramBotsApi telegramBotsApi = new TelegramBotsApi();
+		//telegramBotsApi = createWebHookBot();
+		//telegramBotsApi.registerBot(new MessageWebhookBot());
+		telegramBotsApi.registerBot(new MessageLongPollingBot());
 	}
 
 
@@ -29,8 +29,7 @@ public class TelegramTalkBotApplication {
 
 
 	private static TelegramBotsApi createWebHookBot() throws TelegramApiException {
-		return new TelegramBotsApi(TelegramBotConsts.EXTERNALWEBHOOKURL,
-				TelegramBotConsts.INTERNALWEBHOOKURL);
+		return new TelegramBotsApi(TelegramBotConsts.EXTERNALWEBHOOKURL, TelegramBotConsts.INTERNALWEBHOOKURL);
 	}
 
 
