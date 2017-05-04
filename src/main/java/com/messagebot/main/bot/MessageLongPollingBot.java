@@ -1,6 +1,7 @@
 package com.messagebot.main.bot;
 
 import com.messagebot.main.consts.TelegramBotConsts;
+import com.messagebot.main.utils.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.api.methods.send.SendDocument;
@@ -85,7 +86,7 @@ public class MessageLongPollingBot extends TelegramLongPollingBot {
 
 
 	private static SendMessage sendHello(Message message) {
-		String userName = BotUtils.getUserNameAPI(message);
+		String userName = Utils.getUserNameAPI(message);
 		StringBuilder messageTextBuilder = new StringBuilder("Hello, ").append(userName);
 		SendMessage sendMessage = new SendMessage();
 		sendMessage.enableMarkdown(true);
@@ -106,14 +107,14 @@ public class MessageLongPollingBot extends TelegramLongPollingBot {
 	}
 
 	private static SendMessage sendStart(Message message) {
-		String userName = BotUtils.getUserNameAPI(message);
+		String userName = Utils.getUserNameAPI(message);
 		StringBuilder messageTextBuilder = new StringBuilder("Hello, " + userName + ". Welcome to SimpleTalkBot. Let's start conversation.");
 		SendMessage sendMessage = prepareSendRequest(message, messageTextBuilder);
 		return sendMessage;
 	}
 
 	private static SendMessage sendStop(Message message) throws TelegramApiException {
-		String userName = BotUtils.getUserNameAPI(message);
+		String userName = Utils.getUserNameAPI(message);
 		StringBuilder messageTextBuilder = new StringBuilder("Good bye, " + userName);
 		SendMessage sendMessage = prepareSendRequest(message, messageTextBuilder);
 		return sendMessage;

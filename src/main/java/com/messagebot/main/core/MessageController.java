@@ -1,10 +1,10 @@
 package com.messagebot.main.core;
 
 import com.messagebot.main.bot.MessageRequest;
-import com.messagebot.main.bot.BotUtils;
 import com.messagebot.main.consts.TelegramBotConsts;
 import com.messagebot.main.model.Message;
 import com.messagebot.main.model.Update;
+import com.messagebot.main.utils.Utils;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.HttpClientBuilder;
@@ -29,14 +29,14 @@ public class MessageController {
 
 	@RequestMapping(value = "/callback/", method = RequestMethod.POST)
 	@ResponseStatus(value = HttpStatus.OK)
-	public void sendMessage(@RequestBody Update update) throws IOException {
+	public void sendMessage(@RequestBody Update update) throws Exception {
 		Message message = update.getMessage();
 		logger.info(message.getText());
 		logger.info(String.valueOf(message.getChat().getId()));
-		if (message.hasText() && !BotUtils.getUserName(message).isEmpty()) {
+		if (message.hasText() && !Utils.getUserName(message).isEmpty()) {
 			String command = message.getText();
 			int chat_id = message.getChat().getId();
-			getBotAnswer(chat_id, BotUtils.getUserName(message), command);
+			getBotAnswer(chat_id, Utils.getUserName(message), command);
 		}
 	}
 
@@ -54,6 +54,9 @@ public class MessageController {
 				break;
 			case TelegramBotConsts.HELP_COMMAND:
 				sendMessageRequest = MessageRequest.sendHelpMessageCommandRequest(chat_id);
+				break;
+			case TelegramBotConsts.LOCATION_COMMAND:
+				sendMessageRequest = MessageRequest.sendLocation(chat_id);
 				break;
 			case TelegramBotConsts.HELLO_KEYBOARD:
 				sendMessageRequest = MessageRequest.sendHelloKeyboard(chat_id, userName);
